@@ -6,10 +6,11 @@
     using Serilog;
     using HLL.Dashboard.Bindicator.Models;
     using HLL.Dashboard.Bindicator.Interfaces;
+    using System.Net;
 
     [ApiController]
     [Route("[controller]")]
-    public class BindicatorController : ControllerBase
+    public class BindicatorController : BaseController
     {
         private readonly IBindicatorProvider _bindicatorProvider;
 
@@ -19,17 +20,10 @@
         }
 
         [HttpGet()]
-        public async Task<BinLookup> Get()
+        [ProducesResponseType(typeof(BinLookup), (int)HttpStatusCode.OK)]
+        public Task<IActionResult> Get()
         {
-            try
-            {
-                return await _bindicatorProvider.Get();
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error Getting Bin Information", e);
-                throw;
-            }
+            return ExecuteAndMapToActionResult(() => _bindicatorProvider.Get());
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
     using CronJobs;
     using DAL.Alert.DataTransferObjects;
@@ -13,7 +14,7 @@
 
     [Route("[controller]")]
     [ApiController]
-    public class AlertController : ControllerBase
+    public class AlertController : BaseController
     {
         private readonly IAlertProvider _alertProvider;
         private readonly IAutoNewsConsumer _autoNewsConsumer;
@@ -25,108 +26,53 @@
         }
 
         [HttpGet("all")]
-        public Task<IEnumerable<Alert>> Get()
+        [ProducesResponseType(typeof(IEnumerable<Alert>), (int)HttpStatusCode.OK)]
+        public Task<IActionResult> Get()
         {
-            try
-            {
-                return _alertProvider.Get();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception getting all alerts");
-                throw;
-            }
+            return ExecuteAndMapToActionResult(() => _alertProvider.Get());
             
         }
 
         [HttpGet("GetLatest")]
-        public IEnumerable<Alert> GetLatestAlerts()
+        [ProducesResponseType(typeof(IEnumerable<Alert>), (int)HttpStatusCode.OK)]
+        public IActionResult GetLatestAlerts()
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception getting latest alerts");
-                throw;
-            }
-            
+            return ExecuteAction(() => throw new NotImplementedException());
         }
 
         [HttpGet("{id}")]
-        public Task<IEnumerable<Alert>> Get(int id)
+        [ProducesResponseType(typeof(IEnumerable<Alert>), (int)HttpStatusCode.OK)]
+        public Task<IActionResult> Get(int id)
         {
-            try
-            {
-                return _alertProvider.Get(id);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception getting alert");
-                throw;
-            }
-            
+            return ExecuteAndMapToActionResult(() => _alertProvider.Get(id));
         }
 
         [HttpPost("GetMultiple")]
-        public Task<IEnumerable<Alert>> Get([FromBody] IEnumerable<int> ids)
+        [ProducesResponseType(typeof(IEnumerable<Alert>), (int)HttpStatusCode.OK)]
+        public Task<IActionResult> Get([FromBody] IEnumerable<int> ids)
         {
-            try
-            {
-                return _alertProvider.Get(ids);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception getting alerts");
-                throw;
-            }
-            
+            return ExecuteAndMapToActionResult(() => _alertProvider.Get(ids));
         }
 
         [HttpPost("NewAlert")]
-        public void Post([FromBody] NewAlert newAlert)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public IActionResult Post([FromBody] NewAlert newAlert)
         {
-            try
-            {
-                _alertProvider.Post(newAlert);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception adding alert");
-                throw;
-            }
-            
+            return ExecuteAction(() => _alertProvider.Post(newAlert));
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] NewAlert newAlert)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public IActionResult Put(int id, [FromBody] NewAlert newAlert)
         {
-            try
-            {
-                _alertProvider.Put(id, newAlert);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception updating alert");
-                throw;
-            }
-            
+            return ExecuteAction(() => _alertProvider.Put(id, newAlert));
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public IActionResult Delete(int id)
         {
-            try
-            {
-                _alertProvider.Delete(id);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception deleting alert");
-                throw;
-            }
-            
+            return ExecuteAction(() => _alertProvider.Delete(id));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using House.DAL.DataTransferObjects;
+using House.DAL.Alert.DataTransferObjects;
 
 namespace House.HLL.Alert.Interfaces
 {

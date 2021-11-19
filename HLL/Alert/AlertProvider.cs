@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using House.DAL.DataTransferObjects;
-using House.DAL.Interfaces;
+using House.DAL.Alert.DataTransferObjects;
+using House.DAL.Alert.Interfaces;
 using House.HLL.Alert.Interfaces;
 
 namespace House.HLL.Alert

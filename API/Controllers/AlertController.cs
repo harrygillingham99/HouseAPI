@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using CronJobs;
-    using DAL.DataTransferObjects;
+    using DAL.Alert.DataTransferObjects;
     using HLL.Alert.Interfaces;
     using HLL.Alert.Models;
+    using HLL.News.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using Serilog;
 
@@ -39,11 +40,11 @@
         }
 
         [HttpGet("GetLatest")]
-        public Task<IEnumerable<Alert>> GetLatestAlerts()
+        public IEnumerable<Alert> GetLatestAlerts()
         {
             try
             {
-                return _alertProvider.GetLatestAlerts();
+                throw new NotImplementedException();
             }
             catch (Exception e)
             {
@@ -51,22 +52,6 @@
                 throw;
             }
             
-        }
-
-        [HttpGet("ConsumeNews/{articles}")]
-        public IActionResult ComsumeNews([FromRoute] int articles)
-        {
-            try
-            {
-                _ = Task.Run(() => _autoNewsConsumer.Consume(articles));
-                return Ok($"Started {nameof(AutoConsumeNews)}");
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception consuming news");
-                throw;
-            }
-            ;
         }
 
         [HttpGet("{id}")]

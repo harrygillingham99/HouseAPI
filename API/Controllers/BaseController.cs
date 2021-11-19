@@ -5,7 +5,7 @@
     using System;
     using System.Net;
     using System.Threading.Tasks;
-    
+
     [ApiController]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
     public abstract class BaseController : ControllerBase
@@ -39,6 +39,20 @@
             {
                 Log.Error(ex.Message, ex);
                 throw;
+            }
+        }
+
+        protected IActionResult ExecuteAction(Action action, string errorMessage = null)
+        {
+            try
+            {
+                action.Invoke();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message, ex);
+                return Problem(errorMessage ?? ex.Message, statusCode: 500, title: ex.GetType().Name);
             }
         }
     }

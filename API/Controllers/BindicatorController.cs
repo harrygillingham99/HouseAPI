@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Serilog;
     using HLL.Dashboard.Bindicator.Models;
-    using House.HLL.Dashboard.Bindicator.Interfaces;
+    using HLL.Dashboard.Bindicator.Interfaces;
 
     [ApiController]
     [Route("[controller]")]

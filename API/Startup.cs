@@ -3,14 +3,15 @@ namespace House.API
     using System.CodeDom.Compiler;
     using CronJobs;
     using DAL;
-    using DAL.Repositories;
     using HLL;
     using HLL.Alert.Models;
     using HLL.Dashboard.Bindicator;
     using HLL.Dashboard.Bindicator.Models;
     using HLL.Dashboard.WeatherFeed.Models;
+    using HLL.News.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -29,9 +30,13 @@ namespace House.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(cfg =>
+            {
+                cfg.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+            });
 
             services.AddSwaggerGen(c =>
+
             {
                 c.UseOneOfForPolymorphism();
 
@@ -52,7 +57,7 @@ namespace House.API
 
             });
 
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddLazyCache();
 
             services.AddCors(options =>
             {
@@ -100,8 +105,6 @@ namespace House.API
             app.UseCors("SiteCorsPolicy");
 
             app.UseHttpsRedirection();
-
-            app.UseMvc();
 
             app.UseRouting();
 

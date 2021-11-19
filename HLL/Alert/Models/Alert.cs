@@ -1,10 +1,11 @@
 ﻿using System;
-using House.DAL.DataTransferObjects;
+using House.DAL.Alert.DataTransferObjects;
 
 namespace House.HLL.Alert.Models
 {
     public class Alert
     {
+        public Alert() { }
         public int Id { get; set; }
         public string Message { get; set; }
         public DateTime DateCreated { get; set; }

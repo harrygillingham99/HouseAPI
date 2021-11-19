@@ -1,9 +1,11 @@
 ﻿namespace House.API.CronJobs
 {
     using System;
+    using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
     using HLL.Alert.Interfaces;
+    using HLL.News.Interfaces;
     using Microsoft.Extensions.Hosting;
     using NCrontab;
     using Serilog;
@@ -12,16 +14,15 @@
     {
         private readonly CrontabSchedule _schedule;
         private readonly IAutoNewsConsumer _autoNewsConsumer;
-        private DateTime _nextRun;
-
-        private string Schedule => "0 9,18 * * 1-5"; //11:59 every week day
+        private readonly string _scheduleExp = @"0,15,30,45 * * * *"; //11:59 every week day
 
         public AutoConsumeNews(IAutoNewsConsumer autoNewsConsumer)
         {
-            _schedule = CrontabSchedule.Parse(Schedule, new CrontabSchedule.ParseOptions { IncludingSeconds = false });
+            _schedule = CrontabSchedule.Parse(_scheduleExp, new CrontabSchedule.ParseOptions { IncludingSeconds = false });
             _autoNewsConsumer = autoNewsConsumer;
-            _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
         }
+
+        private DateTime NextOccurrence => _schedule.GetNextOccurrence(DateTime.Now);
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
@@ -34,10 +35,9 @@
         {
             do
             {
-                if (DateTime.Now > _nextRun)
+                if (DateTime.Now > NextOccurrence)
                 {
                     Process();
-                    _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
                 }
                 await Task.Delay(5000, stoppingToken); //5 seconds delay
             }
@@ -46,7 +46,7 @@
 
         private void Process()
         {
-            _autoNewsConsumer.Consume();
+            Debug.WriteLine("lol");
         }
     }
 }

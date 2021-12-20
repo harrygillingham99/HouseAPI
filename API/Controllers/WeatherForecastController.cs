@@ -23,7 +23,7 @@
         [ProducesResponseType(typeof(OpenWeatherCurrent), (int)HttpStatusCode.OK)]
         public Task<IActionResult> Get()
         {
-            return ExecuteAndMapToActionResult(() => Task.FromResult(_weatherProvider.Get()));
+            return ExecuteAndMapToActionResult(() => _weatherProvider.Get());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace House.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).UseSerilog(Log.Logger);
         }
     }
 }

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
-    using CronJobs;
     using DAL.Alert.DataTransferObjects;
     using HLL.Alert.Interfaces;
     using HLL.Alert.Models;
@@ -33,11 +32,11 @@
             
         }
 
-        [HttpGet("GetLatest")]
+        [HttpGet("Latest")]
         [ProducesResponseType(typeof(IEnumerable<Alert>), (int)HttpStatusCode.OK)]
-        public IActionResult GetLatestAlerts()
+        public Task<IActionResult> GetLatestAlerts()
         {
-            return ExecuteAction(() => throw new NotImplementedException());
+            return ExecuteAndMapToActionResult(() => _alertProvider.GetLatestAlerts());
         }
 
         [HttpGet("{id}")]

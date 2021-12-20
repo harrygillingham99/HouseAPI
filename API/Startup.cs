@@ -1,10 +1,8 @@
 namespace House.API
 {
     using System.CodeDom.Compiler;
-    using CronJobs;
     using DAL;
     using HLL;
-    using HLL.Alert.Models;
     using HLL.Dashboard.Bindicator;
     using HLL.Dashboard.Bindicator.Models;
     using HLL.Dashboard.WeatherFeed.Models;
@@ -15,7 +13,7 @@ namespace House.API
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.OpenApi.Models;
+    using NJsonSchema;
     using Scrutor;
 
     public class Startup
@@ -35,26 +33,11 @@ namespace House.API
                 cfg.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
             });
 
-            services.AddSwaggerGen(c =>
-
+            services.AddOpenApiDocument(c =>
             {
-                c.UseOneOfForPolymorphism();
-
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "House API",
-                    Version = "1.0",
-                    Description =
-                        "An api for the house.",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "The boys",
-                        Email = "house@theroad.uk"
-                    },
-
-
-                });
-
+                c.Title = "House API";
+                c.Description = "An api for the house";
+                c.SchemaType = SchemaType.OpenApi3;
             });
 
             services.AddLazyCache();
@@ -80,7 +63,6 @@ namespace House.API
             services.Configure<OpenWeatherApi>(option => Configuration.GetSection("OpenWeatherApi").Bind(option));
             services.Configure<NewsApi>(option => Configuration.GetSection("NewsApi").Bind(option));
             services.Configure<DbConnections>(option => Configuration.GetSection("DbConnections").Bind(option));
-            services.AddHostedService<AutoConsumeNews>();
             ScanForAllRemainingRegistrations(services);
         }
 
@@ -91,8 +73,7 @@ namespace House.API
                 .AddClasses(x => x.WithoutAttribute(typeof(GeneratedCodeAttribute)))
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsImplementedInterfaces()
-                .WithTransientLifetime()); 
-            //To stop the hosted service crying register services as transient by default, not scoped. This API is stateless so shouldn't cause issues
+                .WithScopedLifetime()); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,12 +96,9 @@ namespace House.API
 
             app.UseAuthorization();
 
-            app.UseSwagger();
+            app.UseOpenApi();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("../swagger/v1/swagger.json", "House API");
-            });
+            app.UseSwaggerUi3();
 
             app.UseEndpoints(endpoints =>
             {

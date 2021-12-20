@@ -1,4 +1,5 @@
-﻿using House.HLL.Dashboard.WeatherFeed.Interfaces;
+﻿using System.Threading.Tasks;
+using House.HLL.Dashboard.WeatherFeed.Interfaces;
 using House.HLL.Dashboard.WeatherFeed.Models;
 
 namespace House.HLL.Dashboard.WeatherFeed
@@ -12,7 +13,7 @@ namespace House.HLL.Dashboard.WeatherFeed
             _weatherServiceAgent = weatherServiceAgent;
         }
 
-        public OpenWeatherCurrent Get()
+        public Task<OpenWeatherCurrent> Get()
         {
             return _weatherServiceAgent.Get();
         }

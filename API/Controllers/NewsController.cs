@@ -21,7 +21,7 @@
         [ProducesResponseType(typeof(List<NewsMessage>), (int)HttpStatusCode.OK)]
         public Task<IActionResult> GetNews()
         {
-            return ExecuteAndMapToActionResult(() => Task.FromResult(_newsConsumer.CurrentNews()));
+            return ExecuteAndMapToActionResult(() => _newsConsumer.CurrentNews());
         }
     }
 }

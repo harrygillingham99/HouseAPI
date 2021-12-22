@@ -29,6 +29,26 @@
             }
         }
 
+        protected IActionResult ExecuteAndMapToActionResultSync<T>(Func<T> request)
+        {
+            try
+            {
+                var response = request.Invoke();
+                return response switch
+                {
+                    Exception errorResponse => throw errorResponse,
+
+                    _ => Ok(response)
+                };
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return Problem(ex.Message, statusCode: 500, title: ex.GetType().Name);
+            }
+        }
+
+
         protected async Task<T> ExecuteAndReturn<T>(Func<Task<T>> request)
         {
             try

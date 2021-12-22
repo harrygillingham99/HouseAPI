@@ -20,7 +20,7 @@ namespace House.HLL.Dashboard.Bindicator.ServiceAgents
         {
             var request = new RestRequest(Method.GET)
                 .AddParameter(nameof(uprn), uprn);
-            return Retry.Retry.Do(() => GetBinData(request), TimeSpan.FromSeconds(1));
+            return Retry.Retry.DoAsync(() => GetBinData(request), TimeSpan.FromSeconds(1));
         }
 
         private async Task<BinLookup> GetBinData(IRestRequest request)

@@ -52,7 +52,7 @@ namespace House.API
                         .WithOrigins("http://localhost", 
                                      "https://localhost", 
                                      "https://localhost:44359", 
-                                     "https://localhost:44370", 
+                                     "http://localhost:44370", 
                                      "http://192.168.0.69:420", 
                                      "http://192.168.1.69");
                 });

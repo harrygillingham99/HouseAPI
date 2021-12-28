@@ -9,5 +9,6 @@ namespace House.HLL.News.Models
         public string Message { get; set; }
 
         public string CreatedBy { get; set; }
+        public DateTime PublishedAt { get; set; }
     }
 }

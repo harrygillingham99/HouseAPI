@@ -29,7 +29,8 @@ namespace House.HLL.News
             return (await GetNewsData()).Articles.Select(x => new NewsMessage
             {
                 Message = x.Title,
-                CreatedBy = x.Source.Name
+                CreatedBy = x.Source.Name,
+                PublishedAt = x.PublishedAt.DateTime
             }).ToList();
         }
 

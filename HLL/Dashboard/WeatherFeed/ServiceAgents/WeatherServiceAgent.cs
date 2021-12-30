@@ -34,12 +34,12 @@ namespace House.HLL.Dashboard.WeatherFeed.ServiceAgents
 
         private async Task<OpenWeatherCurrent> GetWeatherData(IRestRequest request)
         {
-            var result = await _weatherClient.ExecuteAsync<OpenWeatherCurrent>(request);
+            var result = await _weatherClient.ExecuteAsync(request);
             
             if (result == null)
                 throw new NullReferenceException();
 
-            if (result.StatusCode == HttpStatusCode.OK) return result.Data;
+            if (result.StatusCode == HttpStatusCode.OK) return JsonConvert.DeserializeObject<OpenWeatherCurrent>(result.Content);
 
             var msg = $"Unexpected error {(int)result.StatusCode} status code from result";
             Log.Error(msg);

@@ -1,23 +1,20 @@
 ﻿namespace House.API.Controllers
 {
-    using System;
-    using HLL.News.Interfaces;
-    using HLL.News.Models;
-    using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using System.Threading.Tasks;
     using HLL.ServerStats;
+    using Microsoft.AspNetCore.Mvc;
 
     [Route("status")]
     public class StatusController : BaseController
     {
         private readonly IMemoryStatusProvider _memoryStatusProvider;
-
-        public StatusController(IMemoryStatusProvider memoryStatusProvider)
+        private readonly IProcessInfo _processInfo;
+        public StatusController(IMemoryStatusProvider memoryStatusProvider, IProcessInfo processInfo)
         {
             _memoryStatusProvider = memoryStatusProvider;
+            _processInfo = processInfo;
         }
 
         [HttpGet("")]
@@ -26,7 +23,23 @@
         {
             return ExecuteAndMapToActionResultSync(() =>
             {
-                var result = _memoryStatusProvider.GetMemoryInfo().ToList();
+                var result = _memoryStatusProvider
+                    .GetMemoryInfo()
+                    .ToList();
+                return result;
+            });
+        }
+
+        [HttpGet("ProcessInfo")]
+        [ProducesResponseType(typeof(List<ProcessInfoResult>), (int)HttpStatusCode.OK)]
+        public IActionResult GetProcessInfo()
+        {
+            return ExecuteAndMapToActionResultSync(() =>
+            {
+                var result = _processInfo
+                    .GetProcessInfo()
+                    .OrderByDescending(proc => proc.MemoryMbUsed)
+                    .ToList();
                 return result;
             });
         }

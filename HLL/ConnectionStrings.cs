@@ -6,5 +6,7 @@
         public string OpenWeather { get; set; }
         public string UniTimetable { get; set; }
         public string NewsApi { get; set; }
+        public string CatTags { get; set; }
+        public string GetCat { get; set; }
     }
 }

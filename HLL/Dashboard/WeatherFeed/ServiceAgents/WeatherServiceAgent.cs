@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using House.HLL.Dashboard.WeatherFeed.Interfaces;
 using House.HLL.Dashboard.WeatherFeed.Models;
+using LazyCache;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
@@ -15,20 +16,26 @@ namespace House.HLL.Dashboard.WeatherFeed.ServiceAgents
     {
         private readonly string _apiKey;
         private readonly IRestClient _weatherClient;
+        private readonly IAppCache _cache;
 
-        public WeatherServiceAgent(IOptions<OpenWeatherApi> openWeatherApi, IOptions<ConnectionStrings> connectionStrings)
+        public WeatherServiceAgent(IOptions<OpenWeatherApi> openWeatherApi, IOptions<ConnectionStrings> connectionStrings, IAppCache cache)
         {
+            _cache = cache;
             _apiKey = openWeatherApi.Value.Key;
             _weatherClient = new RestClient(connectionStrings.Value.OpenWeather);
         }
 
         public Task<OpenWeatherCurrent> Get()
         {
-            var request = new RestRequest(Method.GET)
-                .AddParameter("q", "Bournemouth")
-                .AddParameter("units", "metric") // important, default is Kelvin
-                .AddParameter("appid", _apiKey);
-            return Retry.Retry.DoAsync(() => GetWeatherData(request), TimeSpan.FromSeconds(1));
+            return _cache.GetOrAddAsync($"{GetType().FullName}_Weather", () =>
+            {
+                var request = new RestRequest(Method.GET)
+                    .AddParameter("q", "Bournemouth")
+                    .AddParameter("units", "metric") // important, default is Kelvin
+                    .AddParameter("appid", _apiKey);
+                return Retry.Retry.DoAsync(() => GetWeatherData(request), TimeSpan.FromSeconds(1));
+            }, DateTimeOffset.Now.AddHours(0.5));
+
 
         }
 

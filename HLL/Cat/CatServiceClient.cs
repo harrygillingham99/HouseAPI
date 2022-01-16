@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using House.HLL.Cat.Interfaces;
+using LazyCache;
 using Microsoft.Extensions.Options;
 using RestSharp;
 
@@ -13,9 +14,11 @@ namespace House.HLL.Cat
         private readonly RestClient _catClient;
         private readonly Random _random;
         private readonly string _getCatUrlStem;
+        private readonly IAppCache _cache;
 
-        public CatServiceClient(IOptions<ConnectionStrings> connectionStrings)
+        public CatServiceClient(IOptions<ConnectionStrings> connectionStrings, IAppCache cache)
         {
+            _cache = cache;
             _random = new Random();
             _catClient = new RestClient(connectionStrings.Value.CatTags);
             _getCatUrlStem = connectionStrings.Value.GetCat;
@@ -23,11 +26,19 @@ namespace House.HLL.Cat
 
         public async Task<string> GetRandomCatUrl()
         {
-            var tagsRequest = new RestRequest();
-            var tags = await _catClient.GetAsync<List<string>>(tagsRequest);
+            var tags = await Tags();
             var randomTag = tags[_random.Next(tags.Count)];
 
             return string.Format(_getCatUrlStem, randomTag);
+        }
+
+        private Task<List<string>> Tags()
+        {
+            return _cache.GetOrAddAsync($"{GetType().FullName}_tags", () =>
+            {
+                var tagsRequest = new RestRequest();
+                return _catClient.GetAsync<List<string>>(tagsRequest);
+            }, DateTimeOffset.Now.AddHours(1));
         }
     }
 }

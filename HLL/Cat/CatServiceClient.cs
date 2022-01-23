@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using House.HLL.Cat.Interfaces;
@@ -26,7 +27,7 @@ namespace House.HLL.Cat
 
         public async Task<string> GetRandomCatUrl()
         {
-            var tags = await Tags();
+            var tags = (await Tags()).Where(tag => !string.IsNullOrWhiteSpace(tag)).ToList();
             var randomTag = tags[_random.Next(tags.Count)];
 
             return string.Format(_getCatUrlStem, randomTag);

@@ -1,12 +1,10 @@
 ﻿namespace House.API.Controllers
 {
-    using System;
     using System.Net;
     using System.Threading.Tasks;
     using HLL.Dashboard.WeatherFeed.Interfaces;
     using HLL.Dashboard.WeatherFeed.Models;
     using Microsoft.AspNetCore.Mvc;
-    using Serilog;
 
     [ApiController]
     [Route("[controller]")]

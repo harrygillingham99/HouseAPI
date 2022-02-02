@@ -1,10 +1,7 @@
 ﻿namespace House.API.Controllers
 {
     using HLL.Cat.Interfaces;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
-    using HLL.ServerStats;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 

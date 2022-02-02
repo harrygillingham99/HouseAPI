@@ -1,6 +1,5 @@
 ﻿namespace House.API.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
@@ -9,7 +8,6 @@
     using HLL.Alert.Models;
     using HLL.News.Interfaces;
     using Microsoft.AspNetCore.Mvc;
-    using Serilog;
 
     [Route("[controller]")]
     [ApiController]

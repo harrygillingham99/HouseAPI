@@ -1,9 +1,7 @@
 ﻿namespace House.API.Controllers
 {
-    using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Serilog;
     using HLL.Dashboard.Bindicator.Models;
     using HLL.Dashboard.Bindicator.Interfaces;
     using System.Net;

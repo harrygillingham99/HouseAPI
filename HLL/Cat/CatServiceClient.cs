@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using House.HLL.Cat.Interfaces;
+using House.HLL.Helpers;
 using LazyCache;
 using Microsoft.Extensions.Options;
 using RestSharp;
@@ -28,7 +28,7 @@ namespace House.HLL.Cat
         public async Task<string> GetRandomCatUrl()
         {
             var tags = (await Tags()).Where(tag => !string.IsNullOrWhiteSpace(tag)).ToList();
-            var randomTag = tags[_random.Next(tags.Count)];
+            var randomTag = tags.GetRandomItemFromList(_random);
 
             return string.Format(_getCatUrlStem, randomTag);
         }

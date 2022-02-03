@@ -12,7 +12,7 @@ namespace House.HLL.Images
     public class ImageProvider : IImageProvider
     {
         private readonly string _filePath;
-        private readonly string[] _imageFileTypes = {"jpg", "jpeg", "png"};
+        private readonly string[] _imageFileTypes = {"jpg", "jpeg", "png", "gif"};
         private readonly Random _rng;
         private readonly StringBuilder _sb;
 

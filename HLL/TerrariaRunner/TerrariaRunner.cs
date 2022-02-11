@@ -8,15 +8,19 @@ namespace House.HLL.TerrariaRunner
     {
         private readonly Process _process;
         private readonly TerrariaConfig _config;
+        private bool _isRunning;
 
         public TerrariaRunner(IOptions<TerrariaConfig> options)
         {
+            _isRunning = false;
             _process = new Process();
             _config = options.Value;
         }
 
         public bool Start()
         {
+            if (_isRunning) return true;
+
             var startInfo = new ProcessStartInfo("cmd.exe", $"/c {_config.StartCommand}")
             {
                 WorkingDirectory = _config.ServerDirectory,
@@ -35,7 +39,9 @@ namespace House.HLL.TerrariaRunner
                 if (e.Data != null) Log.Information(e.Data);
             };
 
-            return _process.Start();
+            _isRunning = _process.Start();
+
+            return _isRunning;
         }
     }
 

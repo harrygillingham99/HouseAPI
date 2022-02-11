@@ -43,12 +43,12 @@ namespace House.HLL.Images
                 return _sb.ToString();
             }
 
-            string ParseCsvGetRandomUrl(string csvPath)
+            async Task<string> ParseCsvGetRandomUrl(string csvPath)
             {
                 using var reader = new StreamReader(csvPath);
                 using var csv = new CsvReader(reader,new CsvConfiguration(CultureInfo.InvariantCulture){ HasHeaderRecord = false});
 
-                var records = csv.GetRecords<string>().ToList();
+                var records = await csv.GetRecordsAsync<string>().ToListAsync();
 
                 return records.GetRandomItemFromList(_rng);
             }
@@ -68,7 +68,7 @@ namespace House.HLL.Images
 
             var randomSource = files.Concat(sourceLists).ToList().GetRandomItemFromList(_rng);
 
-            return sourceLists.Contains(randomSource) ? Task.FromResult(ParseCsvGetRandomUrl(randomSource)) : FormatAsDataUri(randomSource);
+            return sourceLists.Contains(randomSource) ? ParseCsvGetRandomUrl(randomSource) : FormatAsDataUri(randomSource);
         }
     }
 }

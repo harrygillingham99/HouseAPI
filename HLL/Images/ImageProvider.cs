@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using House.HLL.Helpers;
 using House.HLL.Images.Interfaces;
 using Microsoft.Extensions.Options;
@@ -45,7 +46,7 @@ namespace House.HLL.Images
             string ParseCsvGetRandomUrl(string csvPath)
             {
                 using var reader = new StreamReader(csvPath);
-                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                using var csv = new CsvReader(reader,new CsvConfiguration(CultureInfo.InvariantCulture){ HasHeaderRecord = false});
 
                 var records = csv.GetRecords<string>().ToList();
 

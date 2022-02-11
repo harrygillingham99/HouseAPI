@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace House.HLL.Images
     {
         private readonly string _filePath;
         private readonly string[] _imageFileTypes = {"jpg", "jpeg", "png"};
+        private readonly string[] _sourceListFileTypes = {"csv"};
         private readonly Random _rng;
         private readonly StringBuilder _sb;
 
@@ -23,8 +25,11 @@ namespace House.HLL.Images
             _sb = new StringBuilder();
         }
 
-        public Task<string> GetRandomImageDataUri()
+        public Task<string> GetRandomImageSource()
         {
+            var files = new List<string>();
+            var sourceLists = new List<string>();
+
             async Task<string> FormatAsDataUri(string filePath)
             {
                 _sb.Append("data:image/")
@@ -35,10 +40,22 @@ namespace House.HLL.Images
                 return _sb.ToString();
             }
 
-            var files = Directory.EnumerateFiles(_filePath, "*",
-                SearchOption.AllDirectories).Where(file => _imageFileTypes.Any(file.EndsWith)).ToList();
+            foreach (var file in Directory.EnumerateFiles(_filePath, "*", SearchOption.AllDirectories))
+            {
+                switch (file)
+                {
+                    case var image when _imageFileTypes.Any(file.EndsWith):
+                        files.Add(image);
+                        break;
+                    case var sourceList when _sourceListFileTypes.Any(file.EndsWith):
+                        sourceLists.Add(sourceList);
+                        break;
+                }
+            }
 
-            return FormatAsDataUri(files.GetRandomItemFromList(_rng));
+            var randomSource = files.Concat(sourceLists).ToList().GetRandomItemFromList(_rng);
+
+            return sourceLists.Contains(randomSource) ? Task.FromResult(randomSource) : FormatAsDataUri(randomSource);
         }
     }
 }

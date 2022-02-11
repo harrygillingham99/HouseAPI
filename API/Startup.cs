@@ -7,6 +7,7 @@ namespace House.API
     using HLL.Dashboard.Bindicator.Models;
     using HLL.Dashboard.WeatherFeed.Models;
     using HLL.News.Models;
+    using HLL.TerrariaRunner;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Formatters;
@@ -64,6 +65,9 @@ namespace House.API
             services.Configure<OpenWeatherApi>(option => Configuration.GetSection("OpenWeatherApi").Bind(option));
             services.Configure<NewsApi>(option => Configuration.GetSection("NewsApi").Bind(option));
             services.Configure<DbConnections>(option => Configuration.GetSection("DbConnections").Bind(option));
+
+            services.AddSingleton<ITerrariaRunner, TerrariaRunner>();
+
             ScanForAllRemainingRegistrations(services);
         }
 

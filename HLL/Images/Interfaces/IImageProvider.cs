@@ -4,6 +4,6 @@ namespace House.HLL.Images.Interfaces
 {
     public interface IImageProvider
     {
-        Task<string> GetRandomImageDataUri();
+        Task<string> GetRandomImageSource();
     }
 }

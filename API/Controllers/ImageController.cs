@@ -18,7 +18,7 @@
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public Task<IActionResult> RandomImage()
         {
-            return ExecuteAndMapToActionResult(() => __image.GetRandomImageDataUri());
+            return ExecuteAndMapToActionResult(() => __image.GetRandomImageSource());
         }
     }
 }

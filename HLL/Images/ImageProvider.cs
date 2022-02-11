@@ -21,6 +21,11 @@ namespace House.HLL.Images
         private readonly Random _rng;
         private readonly StringBuilder _sb;
 
+        private class CsvRow
+        {
+            public string Url { get; set; }
+        }
+
         public ImageProvider(IOptions<ConnectionStrings> options)
         {
             _filePath = options.Value.ImagesFolder;
@@ -48,9 +53,9 @@ namespace House.HLL.Images
                 using var reader = new StreamReader(csvPath);
                 using var csv = new CsvReader(reader,new CsvConfiguration(CultureInfo.InvariantCulture){ HasHeaderRecord = false});
 
-                var records = await csv.GetRecordsAsync<string>().ToListAsync();
+                var records = await csv.GetRecordsAsync<CsvRow>().ToListAsync();
 
-                return records.GetRandomItemFromList(_rng);
+                return records.Select(x => x.Url).ToList().GetRandomItemFromList(_rng);
             }
 
             foreach (var file in Directory.EnumerateFiles(_filePath, "*", SearchOption.AllDirectories))

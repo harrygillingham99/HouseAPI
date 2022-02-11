@@ -65,6 +65,7 @@ namespace House.API
             services.Configure<OpenWeatherApi>(option => Configuration.GetSection("OpenWeatherApi").Bind(option));
             services.Configure<NewsApi>(option => Configuration.GetSection("NewsApi").Bind(option));
             services.Configure<DbConnections>(option => Configuration.GetSection("DbConnections").Bind(option));
+            services.Configure<TerrariaConfig>(option => Configuration.GetSection(nameof(TerrariaConfig)).Bind(option));
 
             services.AddSingleton<ITerrariaRunner, TerrariaRunner>();
 

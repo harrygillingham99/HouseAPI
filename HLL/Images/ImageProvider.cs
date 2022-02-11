@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
 using House.HLL.Helpers;
 using House.HLL.Images.Interfaces;
 using Microsoft.Extensions.Options;
@@ -40,6 +42,16 @@ namespace House.HLL.Images
                 return _sb.ToString();
             }
 
+            string ParseCsvGetRandomUrl(string csvPath)
+            {
+                using var reader = new StreamReader(csvPath);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+                var records = csv.GetRecords<string>().ToList();
+
+                return records.GetRandomItemFromList(_rng);
+            }
+
             foreach (var file in Directory.EnumerateFiles(_filePath, "*", SearchOption.AllDirectories))
             {
                 switch (file)
@@ -55,7 +67,7 @@ namespace House.HLL.Images
 
             var randomSource = files.Concat(sourceLists).ToList().GetRandomItemFromList(_rng);
 
-            return sourceLists.Contains(randomSource) ? Task.FromResult(randomSource) : FormatAsDataUri(randomSource);
+            return sourceLists.Contains(randomSource) ? Task.FromResult(ParseCsvGetRandomUrl(randomSource)) : FormatAsDataUri(randomSource);
         }
     }
 }

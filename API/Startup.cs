@@ -8,6 +8,7 @@ namespace House.API
     using HLL.Dashboard.WeatherFeed.Models;
     using HLL.News.Models;
     using HLL.TerrariaRunner;
+    using HLL.TerrariaRunner.Interfaces;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Formatters;

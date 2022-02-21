@@ -31,9 +31,9 @@
 
         [HttpPost("Command")]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
-        public Task<IActionResult> Command([FromBody] string command)
+        public void Command([FromBody] string command)
         {
-            return ExecuteAndMapToActionResult<Task>(() => _terrariaRunner.InputCommand(command));
+             ExecuteAction( () => _terrariaRunner.InputCommand(command));
         }
     }
 }

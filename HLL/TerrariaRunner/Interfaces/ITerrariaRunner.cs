@@ -7,6 +7,6 @@ namespace House.HLL.TerrariaRunner.Interfaces
     {
         List<string> GetCurrentLogsTail(int secondsToCapture);
         bool Start();
-        Task InputCommand(string command);
+        void InputCommand(string command);
     }
 }

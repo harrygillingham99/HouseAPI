@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using House.HLL.Cat.Interfaces;
 using House.HLL.Helpers;
+using House.Objects;
 using LazyCache;
 using Microsoft.Extensions.Options;
 using RestSharp;

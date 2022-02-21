@@ -28,20 +28,24 @@ namespace House.HLL.TerrariaRunner
         {
             if (_isRunning) return true;
 
-            var startInfo = new ProcessStartInfo("cmd.exe", $"/c {_config.StartCommand}")
+            var startCmd = $"{Path.Join(_config.ServerDirectory, _config.StartCommand)}";
+
+            var startInfo = new ProcessStartInfo(startCmd)
             {
-                WorkingDirectory = _config.ServerDirectory,
+                Arguments = _config.StartArgs,
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 RedirectStandardInput = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
             };
 
             void CaptureStdOutput(object sender, DataReceivedEventArgs e)
             {
-                if (!string.IsNullOrWhiteSpace(e.Data))
+                if (e.Data != null)
                 {
+                    Debug.WriteLine(e.Data);
                     Log.Verbose(e.Data);
                 }
             }
@@ -49,17 +53,20 @@ namespace House.HLL.TerrariaRunner
             _process.StartInfo = startInfo;
             _process.ErrorDataReceived += CaptureStdOutput;
             _process.OutputDataReceived += CaptureStdOutput;
+            _process.EnableRaisingEvents = true;
+            _process.Exited += (sender, e) => Debug.WriteLine("Terraria Exited!");
             _isRunning = _process.Start();
+
+            _process.BeginErrorReadLine();
+            _process.BeginOutputReadLine();
 
             return _isRunning;
         }
 
-        public async Task InputCommand(string command)
+        public void InputCommand(string command)
         {
-            var writer = _process.StandardInput;
-            await writer.WriteLineAsync(command);
-            await writer.FlushAsync();
-            writer.Close();
+            using var writer = _process.StandardInput;
+            writer.Write(command);
         }
 
         public List<string> GetCurrentLogsTail(int secondsToCapture)

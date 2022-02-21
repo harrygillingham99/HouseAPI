@@ -1,6 +1,11 @@
+using House.Objects;
+using House.Objects.Attributes;
+
 namespace House.API
 {
+    using System;
     using System.CodeDom.Compiler;
+    using BackgroundService;
     using DAL;
     using HLL;
     using HLL.Dashboard.Bindicator;
@@ -16,7 +21,9 @@ namespace House.API
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using NJsonSchema;
+    using NSwag;
     using Scrutor;
+    using SignalR;
 
     public class Startup
     {
@@ -40,6 +47,7 @@ namespace House.API
                 c.Title = "House API";
                 c.Description = "An api for the house";
                 c.SchemaType = SchemaType.OpenApi3;
+                c.DocumentProcessors.Add(new SchemaExtenderDocumentProcessor());
             });
 
             services.AddLazyCache();
@@ -61,6 +69,12 @@ namespace House.API
                 });
             });
 
+            services.AddSignalR(config =>
+            {
+                config.ClientTimeoutInterval = TimeSpan.FromSeconds(120);
+                config.EnableDetailedErrors = true;
+            });
+
             services.Configure<Lookup>(option => Configuration.GetSection("Lookup").Bind(option));
             services.Configure<ConnectionStrings>(option => Configuration.GetSection("ConnectionStrings").Bind(option));
             services.Configure<OpenWeatherApi>(option => Configuration.GetSection("OpenWeatherApi").Bind(option));
@@ -70,6 +84,8 @@ namespace House.API
 
             services.AddSingleton<ITerrariaRunner, TerrariaRunner>();
 
+            services.AddHostedService<NotificationHostedService>();
+
             ScanForAllRemainingRegistrations(services);
         }
 
@@ -77,7 +93,7 @@ namespace House.API
         {
             services.Scan(scan => scan
                 .FromAssembliesOf(typeof(Startup), typeof(BindicatorProvider), typeof(BaseRepository))
-                .AddClasses(x => x.WithoutAttribute(typeof(GeneratedCodeAttribute)))
+                .AddClasses(x => x.WithoutAttribute(typeof(GeneratedCodeAttribute)).WithoutAttribute<ScrutorIgnoreAttribute>())
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()); 
@@ -107,9 +123,15 @@ namespace House.API
 
             app.UseSwaggerUi3();
 
+            app.UseReDoc(cfg =>
+            {
+                cfg.Path = "/docs";
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<AppHub>("/app-hub");
             });
         }
     }

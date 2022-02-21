@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Management;
+using House.Objects.Objects;
 
 namespace House.HLL.ServerStats
 {
@@ -20,12 +21,6 @@ namespace House.HLL.ServerStats
                 };
             }
         }
-    }
-
-    public class ProcessInfoResult
-    {
-        public string Name { get; set; }
-        public long MemoryMbUsed { get; set; }
     }
 
     public interface IProcessInfo

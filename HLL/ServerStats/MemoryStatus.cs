@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Management;
+using House.Objects.Objects;
 
 namespace House.HLL.ServerStats
 {
@@ -29,13 +30,6 @@ namespace House.HLL.ServerStats
                 };
             }
         }
-    }
-
-    public class Status
-    {
-        public double TotalMb { get; set; }
-        public int FreeMb { get; set; }
-        public int UsedMb { get; set; }
     }
 
     public interface IMemoryStatusProvider

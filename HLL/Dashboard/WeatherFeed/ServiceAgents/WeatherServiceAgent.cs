@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using House.HLL.Dashboard.WeatherFeed.Interfaces;
 using House.HLL.Dashboard.WeatherFeed.Models;
+using House.Objects;
 using LazyCache;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;

@@ -9,6 +9,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using House.HLL.Helpers;
 using House.HLL.Images.Interfaces;
+using House.Objects;
 using Microsoft.Extensions.Options;
 
 namespace House.HLL.Images

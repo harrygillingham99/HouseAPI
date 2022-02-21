@@ -26,5 +26,6 @@
     <ProjectReference Include="..\DAL\House.DAL.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\House.SignalR\House.SignalR.csproj" />
   </ItemGroup>
 </Project>

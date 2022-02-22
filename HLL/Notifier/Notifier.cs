@@ -34,7 +34,7 @@ namespace House.HLL.Notifier
                 CatUrl = await _cats.GetRandomCatUrl(),
                 RandomImageUri = await _images.GetRandomImageSource(),
                 ServerStatus = _memory.GetMemoryInfo().ToList(),
-                Processes = _processes.GetProcessInfo().ToList().OrderByDescending(proc => proc.MemoryMbUsed)
+                Processes = _processes.GetProcessInfo().OrderByDescending(proc => proc.MemoryMbUsed).ToList()
             };
 
             await _hub.Clients.All.Broadcast(info);

@@ -1,4 +1,4 @@
-﻿namespace House.HLL
+﻿namespace House.Objects
 {
     public class ConnectionStrings
     {

@@ -59,6 +59,7 @@ namespace House.API
                     builder
                         .AllowAnyHeader()
                         .WithMethods("GET", "POST", "PUT", "DELETE")
+                        .AllowCredentials()
                         .WithOrigins("http://localhost", 
                                      "https://localhost", 
                                      "https://localhost:44359", 

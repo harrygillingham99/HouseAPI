@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using House.HLL.Dashboard.Bindicator.Interfaces;
 using House.HLL.Dashboard.Bindicator.Models;
+using House.Objects;
 using LazyCache;
 using Microsoft.Extensions.Options;
 using RestSharp;

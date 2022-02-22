@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using House.HLL.News.Interfaces;
 using House.HLL.News.Models;
+using House.Objects;
 using LazyCache;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;

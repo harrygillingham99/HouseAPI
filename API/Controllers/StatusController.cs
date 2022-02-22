@@ -1,4 +1,6 @@
-﻿namespace House.API.Controllers
+﻿using House.Objects.Objects;
+
+namespace House.API.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;

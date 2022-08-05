@@ -1,4 +1,8 @@
-﻿namespace House.HLL.Dashboard.Bindicator.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace House.HLL.Dashboard.Bindicator.Models
 {
     public class BinLookup
     {
@@ -6,11 +10,15 @@
         public Bin Recycling { get; set; }
         public Bin FoodWaste { get; set; }
 
-        public BinLookup(BinLookupDto dto)
+        public BinLookup(List<BinLookupDto> dto)
         {
-            Rubbish = new Bin(dto.Rubbish);
-            Recycling = new Bin(dto.Recycling);
-            FoodWaste = new Bin(dto.FoodWaste);
+            BinLookupDto ResolveBin(string binType) =>
+                dto.FirstOrDefault(bin =>
+                bin.BinType.Equals(binType, StringComparison.InvariantCultureIgnoreCase));
+
+            Rubbish = new Bin(ResolveBin("rubbish"));
+            Recycling = new Bin(ResolveBin("recycling"));
+            FoodWaste = new Bin(ResolveBin("food waste"));
         }
 
         public BinLookup()
@@ -20,8 +28,11 @@
 
     public class BinLookupDto
     {
-        public BinDto Rubbish { get; set; }
-        public BinDto Recycling { get; set; }
-        public BinDto FoodWaste { get; set; }
+        public string BinType { get; set; }
+        public string PdfLink { get; set; }
+        public bool Communal { get; set; }
+        public DateTime Next { get; set; }
+        public DateTime Subsequent { get; set; }
     }
+
 }

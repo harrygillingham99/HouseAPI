@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using House.HLL.Dashboard.Bindicator.Interfaces;
 using House.HLL.Dashboard.Bindicator.Models;
@@ -23,7 +24,7 @@ namespace House.HLL.Dashboard.Bindicator.ServiceAgents
         public Task<BinLookup> Lookup(string uprn)
         {
             var request = new RestRequest(Method.GET)
-                .AddParameter(nameof(uprn), uprn);
+                .AddQueryParameter(nameof(uprn), uprn);
             return Retry.Retry.DoAsync(() => GetBinData(request), TimeSpan.FromSeconds(1));
         }
 
@@ -31,7 +32,7 @@ namespace House.HLL.Dashboard.Bindicator.ServiceAgents
         {
             return _cache.GetOrAddAsync($"{GetType().FullName}_BinLookup", async () =>
             {
-                var result = await _lookupClient.GetAsync<BinLookupDto>(request);
+                var result = await _lookupClient.GetAsync<List<BinLookupDto>>(request);
                 return new BinLookup(result);
             }, DateTimeOffset.Now.AddHours(1));
         }

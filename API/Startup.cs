@@ -67,6 +67,7 @@ namespace House.API
                                      "http://localhost:62110/",
                                      "http://192.168.0.69:420",
                                      "http://localhost:44370",
+                                     "http://192.168.1.100",
                                      "http://192.168.1.69");
                 });
             });

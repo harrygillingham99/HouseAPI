@@ -30,7 +30,7 @@ namespace House.HLL.Dashboard.WeatherFeed.ServiceAgents
         {
             return _cache.GetOrAddAsync($"{GetType().FullName}_Weather", () =>
             {
-                var request = new RestRequest(Method.GET)
+                var request = new RestRequest { Method = Method.Get }
                     .AddParameter("q", "Bournemouth")
                     .AddParameter("units", "metric") // important, default is Kelvin
                     .AddParameter("appid", _apiKey);
@@ -40,7 +40,7 @@ namespace House.HLL.Dashboard.WeatherFeed.ServiceAgents
 
         }
 
-        private async Task<OpenWeatherCurrent> GetWeatherData(IRestRequest request)
+        private async Task<OpenWeatherCurrent> GetWeatherData(RestRequest request)
         {
             var result = await _weatherClient.ExecuteAsync(request);
             

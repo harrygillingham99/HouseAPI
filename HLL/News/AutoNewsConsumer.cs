@@ -39,7 +39,7 @@ namespace House.HLL.News
         {
             return _cache.GetOrAddAsync($"{GetType().FullName}_news_data", () => DoAsync(async () =>
             {
-                var request = new RestRequest(Method.GET);
+                var request = new RestRequest { Method = Method.Get };
                 var result = _newsClient.ExecuteAsync<NewsRoot>(request);
                 return (await result)?.Data ?? new NewsRoot();
             }, TimeSpan.FromSeconds(1)), new MemoryCacheEntryOptions {AbsoluteExpiration = DateTime.Now.AddMinutes(5)});

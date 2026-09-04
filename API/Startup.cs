@@ -20,7 +20,6 @@ namespace House.API
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using NJsonSchema;
     using NSwag;
     using Scrutor;
     using SignalR;
@@ -46,7 +45,6 @@ namespace House.API
             {
                 c.Title = "House API";
                 c.Description = "An api for the house";
-                c.SchemaType = SchemaType.OpenApi3;
                 c.DocumentProcessors.Add(new SchemaExtenderDocumentProcessor());
             });
 
@@ -124,7 +122,7 @@ namespace House.API
 
             app.UseOpenApi();
 
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi();
 
             app.UseReDoc(cfg =>
             {
